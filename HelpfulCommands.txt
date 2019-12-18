@@ -18,7 +18,7 @@ Developers reject simple solutions and turn complex ones into more complex
 
 When it comes to data transfer it should not be a complex solution 
 
- 
+
 
 
 
