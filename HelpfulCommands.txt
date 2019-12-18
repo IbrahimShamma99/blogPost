@@ -1,0 +1,24 @@
+
+
+REST : Representational State Transfer 
+SOAP : single object Access protocol 
+
+REST started in 1999
+
+Principle 1 Everything is a resource {Images,videos , text etc}
+Principle 2 Each source is identified by unique identifier {jpeg , png etc }
+Principle 3 Manipulation of different resouces is standard {Get , Post , Delete , Trace etc }
+Principle 4 Resource can have multiple representation
+Principle 5 communicate with the resource in a stateless manner
+
+Statelessness of restful api isolates the caller from the changes in the server side 
+the caller is not expected to communicate with the same server everytime 
+
+Developers reject simple solutions and turn complex ones into more complex 
+
+When it comes to data transfer it should not be a complex solution 
+
+ 
+
+
+
