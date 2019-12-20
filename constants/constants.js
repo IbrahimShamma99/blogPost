@@ -19,10 +19,29 @@ const ArticleRoutes = {
     base:'/articles'
 };
 
-const Constants = {    
-    TestRoutes ,
+const UserRoutes = {
+    base:'/',
+    user:'/user',
+    login:'/user/login',
+    users:'/users'
+};
+
+const ProfileRoutes = {
+    base:'/profiles',
+    username:'/:username',
+    follow:'/:username/follow'
+};
+const TagsRoutes = {
+    base:'/tags',
+    default:'/'
+};
+const Constants = {
+    TestRoutes,
     TestNames,
-    ArticleRoutes
+    ArticleRoutes,
+    UserRoutes,
+    ProfileRoutes,
+    TagsRoutes
 };
 
 module.exports = {
