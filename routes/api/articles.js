@@ -236,7 +236,7 @@ router.delete('/:article/favorite', auth.required, function(req, res, next) {
   }).catch(next);
 });
 
-// return an article's comments
+// NOTE return an article's comments
 router.get('/:article/comments', auth.optional, function(req, res, next){
   Promise.resolve(req.payload ? User.findById(req.payload.id) : null).then(function(user){
     return req.article.populate({
@@ -281,9 +281,16 @@ router.post('/:article/comments', auth.required, function(req, res, next) {
     });
   }).catch(next);
 });
-
+/**SECTION 
+ * What happening here 
+ * Find article by id 
+ * then list of comments for this article
+ * find by id the comment desired to be deleted 
+ * NOTE Authentication is required to Delete
+ */
 router.delete('/:article/comments/:comment', auth.required, function(req, res, next) {
-  if(req.comment.author.toString() === req.payload.id.toString()){
+  if(req.comment.author.toString() === req.payload.id.toString() || 
+  req.comment.article.author.toString() === req.payload.id.toString()){
     req.article.comments.remove(req.comment._id);
     req.article.save()
       .then(Comment.find({_id: req.comment._id}).remove().exec())

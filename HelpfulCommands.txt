@@ -1,5 +1,4 @@
 
-
 REST : Representational State Transfer 
 SOAP : single object Access protocol 
 
@@ -53,19 +52,5 @@ Software Methodologies
 {Make sample present it then optimize it before making the final solution}
 3-Agile Software Development Methodology (Certainly, such type of a methodology 
 is one theoretical outline for undertaking several software engineering projects. )
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
