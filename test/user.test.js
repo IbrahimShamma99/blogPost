@@ -41,5 +41,3 @@ test(TestConstants.TestNames.loginTest, function () {
         }
     }).expect(201);
 });
-
-// TODO Add article , Profile , tags tests
