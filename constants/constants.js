@@ -9,10 +9,22 @@ const TestNames = {
     newuser:"assign new user"
 };
 
-const TestConstants = {    
+const ArticleRoutes = {
+    DeleteComment:'/:article/comments/:comment',
+    Comments:'/:article/comments',
+    Favorite:'/:article/favorite',
+    article:'/:article',
+    feed:'/feed',
+    default:'/',
+    base:'/articles'
+};
+
+const Constants = {    
     TestRoutes ,
-    TestNames};
+    TestNames,
+    ArticleRoutes
+};
 
 module.exports = {
-    TestConstants
+    Constants: Constants
 };

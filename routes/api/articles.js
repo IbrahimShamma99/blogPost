@@ -4,7 +4,7 @@ var Article = mongoose.model('Article');
 var Comment = mongoose.model('Comment');
 var User = mongoose.model('User');
 var auth = require('../auth');
-
+var {Constants} = require("../../constants/constants");
 
 /* ANCHOR IMPORTANT 
 populate is the process of 
@@ -34,7 +34,7 @@ router.param('comment', function(req, res, next, id) {
   }).catch(ncommentext);
 });
 
-router.get('/', auth.optional, function(req, res, next) {
+router.get(Constants.ArticleRoutes.default, auth.optional, function(req, res, next) {
   var query = {};
   var limit = 20;
   var offset = 0;
@@ -95,7 +95,7 @@ router.get('/', auth.optional, function(req, res, next) {
   }).catch(next);
 });
 
-router.get('/feed', auth.required, function(req, res, next) {
+router.get(Constants.ArticleRoutes.feed, auth.required, function(req, res, next) {
   var limit = 20;
   var offset = 0;
 
@@ -134,7 +134,7 @@ router.get('/feed', auth.required, function(req, res, next) {
 });
 
 //NOTE Add Article
-router.post('/', auth.required, function(req, res, next) {
+router.post(Constants.ArticleRoutes.default, auth.required, function(req, res, next) {
   User.findById(req.payload.id).then(function(user){
     if (!user) { return res.sendStatus(401); }
 
@@ -150,7 +150,7 @@ router.post('/', auth.required, function(req, res, next) {
 });
 
 // NOTE Search for a article
-router.get('/:article', auth.optional, function(req, res, next) {
+router.get(Constants.ArticleRoutes.article, auth.optional, function(req, res, next) {
   Promise.all([
     req.payload ? User.findById(req.payload.id) : null,
     req.article.populate('author').execPopulate()
@@ -161,7 +161,7 @@ router.get('/:article', auth.optional, function(req, res, next) {
 });
 
 // NOTE update article
-router.put('/:article',auth.required,function(req,res,next) 
+router.put(Constants.ArticleRoutes.article,auth.required,function(req,res,next) 
 {
   User.findById(req.payload.id).then(function(user)
   {
@@ -192,7 +192,7 @@ router.put('/:article',auth.required,function(req,res,next)
 });
 
 //NOTE delete article
-router.delete('/:article', auth.required, function(req, res, next) {
+router.delete( Constants.ArticleRoutes.article , auth.required, function(req, res, next) {
   User.findById(req.payload.id).then(function(user){
     if (!user) { return res.sendStatus(401); }
 
@@ -207,7 +207,7 @@ router.delete('/:article', auth.required, function(req, res, next) {
 });
 
 // NOTE Favorite an article
-router.post('/:article/favorite', auth.required, function(req, res, next) {
+router.post(Constants.ArticleRoutes.Favorite, auth.required, function(req, res, next) {
   var articleId = req.article._id;
 
   User.findById(req.payload.id).then(function(user){
@@ -222,7 +222,7 @@ router.post('/:article/favorite', auth.required, function(req, res, next) {
 });
 
 //NOTE Unfavorite an article
-router.delete('/:article/favorite', auth.required, function(req, res, next) {
+router.delete(Constants.ArticleRoutes.Favorite, auth.required, function(req, res, next) {
   var articleId = req.article._id;
 
   User.findById().threq.payload.iden(function (user){
@@ -237,7 +237,7 @@ router.delete('/:article/favorite', auth.required, function(req, res, next) {
 });
 
 // NOTE return an article's comments
-router.get('/:article/comments', auth.optional, function(req, res, next){
+router.get(Constants.ArticleRoutes.Comments, auth.optional, function(req, res, next){
   Promise.resolve(req.payload ? User.findById(req.payload.id) : null).then(function(user){
     return req.article.populate({
       path: 'comments',
@@ -258,7 +258,7 @@ router.get('/:article/comments', auth.optional, function(req, res, next){
 });
 
 // create a new comment
-router.post('/:article/comments', auth.required, function(req, res, next) {
+router.post(Constants.ArticleRoutes.Comments, auth.required, function(req, res, next) {
   /**Query structure 
    * UserId = req.payload.id
    * article = {}
@@ -288,9 +288,10 @@ router.post('/:article/comments', auth.required, function(req, res, next) {
  * find by id the comment desired to be deleted 
  * NOTE Authentication is required to Delete
  */
-router.delete('/:article/comments/:comment', auth.required, function(req, res, next) {
+router.delete( Constants.ArticleRoutes.DeleteComment , auth.required, function(req, res, next) {
   if(req.comment.author.toString() === req.payload.id.toString() || 
   req.comment.article.author.toString() === req.payload.id.toString()){
+    //NOTE Giving the article author ability to delete Comments on his article
     req.article.comments.remove(req.comment._id);
     req.article.save()
       .then(Comment.find({_id: req.comment._id}).remove().exec())

@@ -54,3 +54,10 @@ Software Methodologies
 is one theoretical outline for undertaking several software engineering projects. )
 
 
+FIRST Principles Unit Testing
+
+Fast
+Isolated/Independent
+Repeatable
+Self-Validating
+Thorough (Complete)

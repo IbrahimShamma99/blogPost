@@ -1,8 +1,8 @@
 var router = require('express').Router();
-
+var {Constants} = require("../../constants/constants");
 router.use('/', require('./users'));
 router.use('/profiles', require('./profiles'));
-router.use('/articles', require('./articles'));
+router.use( Constants.ArticleRoutes.base , require('./articles'));
 router.use('/tags', require('./tags'));
 
 router.use(function(err, req, res, next){
