@@ -6,26 +6,27 @@ var User = mongoose.model('User');
 var auth = require('../auth');
 
 // Preload article objects on routes with ':article'
-router.param('article', function(req, res, next, slug) {
+router.param('article',function(req,res,next,slug){
   Article.findOne({ slug: slug})
     .populate('author')
     .then(function (article) {
-      if (!article) { return res.sendStatus(404); 
+      //NOTE in case article not found
+      if (!article) { 
+        return res.sendStatus(404); 
       }
       req.article = article;
-
-      return next();
+      return next();//MiddleWare
     }).catch(next);
 });
 
 router.param('comment', function(req, res, next, id) {
   Comment.findById(id).then(function(comment){
-    if(!comment) { return res.sendStatus(404); }
-
+    if(!comment) { 
+      return res.sendStatus(404); 
+    }
     req.comment = comment;
-
     return next();
-  }).catch(next);
+  }).catch(ncommentext);
 });
 
 router.get('/', auth.optional, function(req, res, next) {
@@ -46,11 +47,12 @@ router.get('/', auth.optional, function(req, res, next) {
   }
 
   Promise.all([
+    //NOTE find Author and Favorited 
     req.query.author ? User.findOne({username: req.query.author}) : null,
     req.query.favorited ? User.findOne({username: req.query.favorited}) : null
   ]).then(function(results){
-    var author = results[0];
-    var favoriter = results[1];
+    var author = results[0];//NOTE author of the article
+    var favoriter = results[1];//NOTE Who favors this article
 
     if(author){
       query.author = author._id;
@@ -75,7 +77,6 @@ router.get('/', auth.optional, function(req, res, next) {
       var articles = results[0];
       var articlesCount = results[1];
       var user = results[2];
-
       return res.json({
         articles: articles.map(function(article){
           return article.toJSONFor(user);
@@ -85,6 +86,7 @@ router.get('/', auth.optional, function(req, res, next) {
     });
   }).catch(next);
 });
+
 
 router.get('/feed', auth.required, function(req, res, next) {
   var limit = 20;
@@ -98,20 +100,22 @@ router.get('/feed', auth.required, function(req, res, next) {
     offset = req.query.offset;
   }
 
-  User.findById(req.payload.id).then(function(user){
-    if (!user) { return res.sendStatus(401); }
+  User.findById(req.payload.id).then(function(user)
+  {
+    if (!user) { 
+      return res.sendStatus(401); 
+    }
 
     Promise.all([
       Article.find({ author: {$in: user.following}})
         .limit(Number(limit))
         .skip(Number(offset))
         .populate('author')
-        .exec(),
-      Article.count({ author: {$in: user.following}})
+        .exec(), //NOTE exec => returns as a promise
+      Article.count({author:{$in: user.following}})
     ]).then(function(results){
       var articles = results[0];
       var articlesCount = results[1];
-
       return res.json({
         articles: articles.map(function(article){
           return article.toJSONFor(user);
@@ -122,6 +126,7 @@ router.get('/feed', auth.required, function(req, res, next) {
   });
 });
 
+//NOTE Add Article
 router.post('/', auth.required, function(req, res, next) {
   User.findById(req.payload.id).then(function(user){
     if (!user) { return res.sendStatus(401); }
@@ -137,21 +142,22 @@ router.post('/', auth.required, function(req, res, next) {
   }).catch(next);
 });
 
-// return a article
+// NOTE Search for a article
 router.get('/:article', auth.optional, function(req, res, next) {
   Promise.all([
     req.payload ? User.findById(req.payload.id) : null,
     req.article.populate('author').execPopulate()
   ]).then(function(results){
     var user = results[0];
-
     return res.json({article: req.article.toJSONFor(user)});
   }).catch(next);
 });
 
-// update article
-router.put('/:article', auth.required, function(req, res, next) {
-  User.findById(req.payload.id).then(function(user){
+// NOTE update article
+router.put('/:article',auth.required,function(req,res,next) 
+{
+  User.findById(req.payload.id).then(function(user)
+  {
     if(req.article.author._id.toString() === req.payload.id.toString()){
       if(typeof req.body.article.title !== 'undefined'){
         req.article.title = req.body.article.title;
@@ -178,7 +184,7 @@ router.put('/:article', auth.required, function(req, res, next) {
   });
 });
 
-// delete article
+//NOTE delete article
 router.delete('/:article', auth.required, function(req, res, next) {
   User.findById(req.payload.id).then(function(user){
     if (!user) { return res.sendStatus(401); }
@@ -193,7 +199,7 @@ router.delete('/:article', auth.required, function(req, res, next) {
   }).catch(next);
 });
 
-// Favorite an article
+// NOTE Favorite an article
 router.post('/:article/favorite', auth.required, function(req, res, next) {
   var articleId = req.article._id;
 
