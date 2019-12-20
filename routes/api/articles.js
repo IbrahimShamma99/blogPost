@@ -10,8 +10,8 @@ router.param('article', function(req, res, next, slug) {
   Article.findOne({ slug: slug})
     .populate('author')
     .then(function (article) {
-      if (!article) { return res.sendStatus(404); }
-
+      if (!article) { return res.sendStatus(404); 
+      }
       req.article = article;
 
       return next();

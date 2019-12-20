@@ -3,14 +3,26 @@ const {
     app
 } = require("../server");
 const {
-    routes
+    TestConstants
 } = require("../constants/constants");
 
 const randomizer = Math.random();
 
-test("assign new user", function () {
+//Uncorrect name or password
+test(TestConstants.TestNames.uncorrectassigneduserTest,function () {
+    request(app).post(TestConstants.TestRoutes.signup).send({
+        
+            user:{
+                email:"hi@gmail.com",
+                password:"niggaknowshit"
+            }
+        
+    }).expect(422);
+});
+//NOTE Register new user
+test(TestConstants.TestNames.newuser, function () {
 
-    request(app).post(routes.signup).send({
+    request(app).post(TestConstants.TestRoutes.signup).send({
         user: {
             username: "Ibrahismjaws",
             email: "ininseeainin1" + randomizer.toString() + "@gmail.com",
@@ -19,10 +31,10 @@ test("assign new user", function () {
     }).expect(201);
 });
 
+//NOTE login 
+test(TestConstants.TestNames.loginTest, function () {
 
-test("Login Same user we assigned", function () {
-
-    request(app).post(routes.signup).send({
+    request(app).post(TestConstants.TestRoutes.login).send({
         user: {
             email: "ininseeainin1" + randomizer.toString() + "@gmail.com",
             password: "macgeetheking"
