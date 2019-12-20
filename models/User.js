@@ -19,6 +19,7 @@ UserSchema.plugin(uniqueValidator, {message: 'is already taken.'});
 
 UserSchema.methods.validPassword = function(password) {
   var hash = crypto.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex');
+  console.log(hash);
   return this.hash === hash;
 };
 
@@ -68,7 +69,7 @@ UserSchema.methods.favorite = function(id){
 };
 
 UserSchema.methods.unfavorite = function(id){
-  this.favorites.remove(id);
+  this.favorites.remove(id); //NOTE remove by id
   return this.save();
 };
 

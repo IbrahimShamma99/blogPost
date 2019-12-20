@@ -8,9 +8,13 @@ passport.use(new LocalStrategy({
   passwordField: 'user[password]'
 }, function(email, password, done) {
   User.findOne({email: email}).then(function(user){
-    if(!user || !user.validPassword(password)){
-      return done(null, false, {errors: {'email or password': 'is invalid'}});
+    if(!user ){
+      return done(null, false, {errors: {'email ': 'is invalid'}});
     }
+//
+  if(!user.validPassword(password)){
+    return done(null, false, {errors: {'Password ': 'is invalid'}});
+  }
 
     return done(null, user);
   }).catch(done);

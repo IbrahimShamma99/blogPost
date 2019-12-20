@@ -5,7 +5,12 @@ var Comment = mongoose.model('Comment');
 var User = mongoose.model('User');
 var auth = require('../auth');
 
-// Preload article objects on routes with ':article'
+
+/* ANCHOR IMPORTANT 
+populate is the process of 
+replacing refrences in DB with document(s)
+*/
+// SECTION  load article objects on routes with ':article'
 router.param('article',function(req,res,next,slug){
   Article.findOne({ slug: slug})
     .populate('author')
@@ -36,10 +41,12 @@ router.get('/', auth.optional, function(req, res, next) {
 
   if(typeof req.query.limit !== 'undefined'){
     limit = req.query.limit;
+    //Whatever req.query.limit you have assign it to limit 
   }
 
   if(typeof req.query.offset !== 'undefined'){
     offset = req.query.offset;
+    //Whatever req.query.offset you have assign it to offset
   }
 
   if( typeof req.query.tag !== 'undefined' ){
@@ -52,7 +59,7 @@ router.get('/', auth.optional, function(req, res, next) {
     req.query.favorited ? User.findOne({username: req.query.favorited}) : null
   ]).then(function(results){
     var author = results[0];//NOTE author of the article
-    var favoriter = results[1];//NOTE Who favors this article
+    var favoriter = results[1];//NOTE favoriter => Who favors this article
 
     if(author){
       query.author = author._id;
@@ -71,6 +78,7 @@ router.get('/', auth.optional, function(req, res, next) {
         .sort({createdAt: 'desc'})
         .populate('author')
         .exec(),
+        //NOTE exec() is to return a Promise
       Article.count(query).exec(),
       req.payload ? User.findById(req.payload.id) : null,
     ]).then(function(results){
@@ -86,7 +94,6 @@ router.get('/', auth.optional, function(req, res, next) {
     });
   }).catch(next);
 });
-
 
 router.get('/feed', auth.required, function(req, res, next) {
   var limit = 20;
@@ -214,11 +221,11 @@ router.post('/:article/favorite', auth.required, function(req, res, next) {
   }).catch(next);
 });
 
-// Unfavorite an article
+//NOTE Unfavorite an article
 router.delete('/:article/favorite', auth.required, function(req, res, next) {
   var articleId = req.article._id;
 
-  User.findById(req.payload.id).then(function (user){
+  User.findById().threq.payload.iden(function (user){
     if (!user) { return res.sendStatus(401); }
 
     return user.unfavorite(articleId).then(function(){
@@ -244,7 +251,7 @@ router.get('/:article/comments', auth.optional, function(req, res, next){
       }
     }).execPopulate().then(function(article) {
       return res.json({comments: req.article.comments.map(function(comment){
-        return comment.toJSONFor(user);
+        return comment.toJSONFor(user);//NOTE return as a promise
       })});
     });
   }).catch(next);
@@ -252,6 +259,12 @@ router.get('/:article/comments', auth.optional, function(req, res, next){
 
 // create a new comment
 router.post('/:article/comments', auth.required, function(req, res, next) {
+  /**Query structure 
+   * UserId = req.payload.id
+   * article = {}
+   * author = user
+   * comments = [{}]
+   */
   User.findById(req.payload.id).then(function(user){
     if(!user){ return res.sendStatus(401); }
 
