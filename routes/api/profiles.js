@@ -1,7 +1,7 @@
 var router = require('express').Router();
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
-var auth = require('../auth');
+var helper = require('../../middlewares/Helper');
 const {Constants} = require("../../constants/constants");
 // Preload user profile on routes with ':username'
 router.param('username', function(req, res, next, username){
@@ -16,7 +16,7 @@ router.param('username', function(req, res, next, username){
   }).catch(next);
 });
 
-router.get( Constants.ProfileRoutes.username , auth.optional, function(req, res, next){
+router.get( Constants.ProfileRoutes.username , helper.optional, function(req, res, next){
   if(req.payload){
     User.findById(req.payload.id).then(function(user){
       if(!user){ return res.json({profile: req.profile.toProfileJSONFor(false)}); }
@@ -28,7 +28,7 @@ router.get( Constants.ProfileRoutes.username , auth.optional, function(req, res,
   }
 });
 
-router.post(Constants.ProfileRoutes.follow, auth.required, function(req, res, next){
+router.post(Constants.ProfileRoutes.follow, helper.required, function(req, res, next){
   var profileId = req.profile._id;
 
   User.findById(req.payload.id).then(function(user){
@@ -41,7 +41,7 @@ router.post(Constants.ProfileRoutes.follow, auth.required, function(req, res, ne
   }).catch(next);
 });
 
-router.delete(Constants.ProfileRoutes.follow, auth.required, function(req, res, next){
+router.delete(Constants.ProfileRoutes.follow, helper.required, function(req, res, next){
   var profileId = req.profile._id;
 
   User.findById(req.payload.id).then(function(user){

@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var router = require('express').Router();
 var passport = require('passport');
 var User = mongoose.model('User');
-var auth = require('../auth');
+var auth = require('../../middlewares/Helper');
 var {Constants} = require("../../constants/constants");
 // var {routes} = require("");
 //NOTE Search for a user 
