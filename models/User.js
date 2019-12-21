@@ -85,6 +85,10 @@ UserSchema.methods.upvote = function(id){
 
   return this.save();
 };
+UserSchema.methods.Cancelupvote = function(id){
+  this.upvotes.remove(id); //NOTE remove by id
+  return this.save();
+};
 
 UserSchema.methods.unfavorite = function(id){
   this.favorites.remove(id); //NOTE remove by id

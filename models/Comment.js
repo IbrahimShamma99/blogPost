@@ -4,6 +4,7 @@ var mongoose = require('mongoose');
  * @author => author of the article
  * @article =>article you commented on
  * @UpvotesCount =>number of upvotes on the comments
+ * @timestamps => to save the datetime of the operation 
  */
 var CommentSchema = new mongoose.Schema({
   body: {type:String , required:true} ,

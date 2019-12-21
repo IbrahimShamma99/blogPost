@@ -325,24 +325,26 @@ router.post(Constants.ArticleRoutes.Comment,
   }).catch(next);
 });
 
-//SECTION  Unfavorite an article
-// router.delete(Constants.ArticleRoutes.Favorite, helper.required, function(req, res, next) {
-//   var articleId = req.article._id;
+//SECTION  cancel upvoting a comment
+router.delete(Constants.ArticleRoutes.Favorite,
+   helper.required, 
+   function(req, res, next) {
+  var commentid = req.comment._id;
 /**REVIEW  Steps
  * Get comment 
  * Get user 
  * update upvotes
  */
-
-//   User.findById().threq.payload.iden(function (user){
-//     if (!user) { return res.sendStatus(401); }
-
-//     return user.unfavorite(articleId).then(function(){
-//       return req.article.updateFavoriteCount().then(function(article){
-//         return res.json({article: article.toJSONFor(user)});
-//       });
-//     });
-//   }).catch(next);
-// })
+  User.findById(req.payload.id).threq.payload.iden(function (user){
+    if (!user) { 
+      return res.sendStatus(401); 
+    }
+    return user.Cancelupvote(commentid).then(function(){
+      return req.commentid.updateUpvotesCount().then(function(comment){
+        return res.json({comment: comment.toJSONFor(user)});
+      });
+    });
+  }).catch(next);
+});
 
 module.exports = router;
