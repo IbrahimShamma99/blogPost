@@ -40,7 +40,6 @@ Optimal Component Selection (Component selection is NP)
 Expensive and Inadequate Component Testing (Headache)
 Complex Interface Specification (This is what I was afraid of)
 
-
 Continuous Versioning (Same as any other paradigm)
 Improper Working due to Application Level Changes
 
@@ -52,7 +51,6 @@ Software Methodologies
 {Make sample present it then optimize it before making the final solution}
 3-Agile Software Development Methodology (Certainly, such type of a methodology 
 is one theoretical outline for undertaking several software engineering projects. )
-
 
 FIRST Principles Unit Testing
 

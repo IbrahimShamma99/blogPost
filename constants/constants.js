@@ -10,7 +10,7 @@ const TestNames = {
 };
 
 const ArticleRoutes = {
-    DeleteComment:'/:article/comments/:comment',
+    Comment:'/:article/comments/:comment',
     Comments:'/:article/comments',
     Favorite:'/:article/favorite',
     article:'/:article',

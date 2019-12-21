@@ -2,11 +2,11 @@ var mongoose = require('mongoose');
 var router = require('express').Router();
 var passport = require('passport');
 var User = mongoose.model('User');
-var auth = require('../../middlewares/Helper');
+var helper = require('../../middlewares/Helper');
 var {Constants} = require("../../constants/constants");
 // var {routes} = require("");
 //NOTE Search for a user 
-router.get( Constants.UserRoutes.user , auth.required , function(req, res, next){
+router.get( Constants.UserRoutes.user , helper.required , function(req, res, next){
   User.findById(req.payload.id).then(
     function(user){
     if(!user){ return res.sendStatus(401); 
@@ -16,7 +16,7 @@ router.get( Constants.UserRoutes.user , auth.required , function(req, res, next)
 });
 
 //NOTE Updates User
-router.put(Constants.UserRoutes.user , auth.required, function(req, res, next){
+router.put(Constants.UserRoutes.user , helper.required, function(req, res, next){
   User.findById(req.payload.id).then(function(user){
     
     if(!user){ return res.sendStatus(401); }

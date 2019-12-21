@@ -1,9 +1,15 @@
 var mongoose = require('mongoose');
-
+/**
+ * @Body => body of the comment
+ * @author => author of the article
+ * @article =>article you commented on
+ * @UpvotesCount =>number of upvotes on the comments
+ */
 var CommentSchema = new mongoose.Schema({
   body: {type:String , required:true} ,
   author: { type: mongoose.Schema.Types.ObjectId, ref:'User'},
-  article: { type: mongoose.Schema.Types.ObjectId, ref:'Article'}
+  article: { type: mongoose.Schema.Types.ObjectId, ref:'Article'},
+  UpvotesCount:{type:Number,default:0}
 },{
   timestamps: true
 });
@@ -16,6 +22,15 @@ CommentSchema.methods.toJSONFor = function(user){
     createdAt: this.createdAt,
     author: this.author.toProfileJSONFor(user)
   };
+};
+CommentSchema.methods.updateUpvotesCount = function() {
+  var comment = this;
+
+  return User.count({Upvotes: {$in: [comment._id]}}).then(function(count){
+    comment.updateUpvotesCount = count;
+
+    return comment.save();
+  });
 };
 
 mongoose.model('Comment', CommentSchema);

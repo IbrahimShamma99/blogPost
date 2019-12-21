@@ -288,7 +288,7 @@ router.post(Constants.ArticleRoutes.Comments, helper.required, function(req, res
  * find by id the comment desired to be deleted 
  * NOTE Authentication is required to Delete
  */
-router.delete( Constants.ArticleRoutes.DeleteComment , helper.required, function(req, res, next) {
+router.delete( Constants.ArticleRoutes.Comment , helper.required, function(req, res, next) {
   if(req.comment.author.toString() === req.payload.id.toString() || 
   req.comment.article.author.toString() === req.payload.id.toString()){
     //NOTE Giving the article author ability to delete Comments on his article
@@ -302,5 +302,42 @@ router.delete( Constants.ArticleRoutes.DeleteComment , helper.required, function
     res.sendStatus(403);
   }
 });
+
+//SECTION Upvote a comment
+router.post(Constants.ArticleRoutes.Comment, 
+  helper.required , 
+  (req, res, next) => {
+/**NOTE Steps
+ * Get comment 
+ * Get user 
+ * update
+ */
+  var commentId = req.comment._id ;
+  
+  User.findById(req.payload.id).then(function(user){
+    if (!user) { return res.sendStatus(401); }
+
+    return user.upvote(commentId).then(function(){
+      return req.comment.updateUpvotesCount().then(function(comment){
+        return res.json({comment: comment.toJSONFor(user)});
+      });
+    });
+  }).catch(next);
+});
+
+// //NOTE Unfavorite an article
+// router.delete(Constants.ArticleRoutes.Favorite, helper.required, function(req, res, next) {
+//   var articleId = req.article._id;
+
+//   User.findById().threq.payload.iden(function (user){
+//     if (!user) { return res.sendStatus(401); }
+
+//     return user.unfavorite(articleId).then(function(){
+//       return req.article.updateFavoriteCount().then(function(article){
+//         return res.json({article: article.toJSONFor(user)});
+//       });
+//     });
+//   }).catch(next);
+// })
 
 module.exports = router;
