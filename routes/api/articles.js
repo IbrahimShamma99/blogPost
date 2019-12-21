@@ -307,16 +307,16 @@ router.delete( Constants.ArticleRoutes.Comment , helper.required, function(req, 
 router.post(Constants.ArticleRoutes.Comment, 
   helper.required , 
   (req, res, next) => {
-/**NOTE Steps
+/**REVIEW Steps
  * Get comment 
  * Get user 
- * update
+ * update upvotes
  */
   var commentId = req.comment._id ;
-  
   User.findById(req.payload.id).then(function(user){
-    if (!user) { return res.sendStatus(401); }
-
+    if (!user) { 
+      return res.sendStatus(401); 
+    }
     return user.upvote(commentId).then(function(){
       return req.comment.updateUpvotesCount().then(function(comment){
         return res.json({comment: comment.toJSONFor(user)});
@@ -325,9 +325,14 @@ router.post(Constants.ArticleRoutes.Comment,
   }).catch(next);
 });
 
-// //NOTE Unfavorite an article
+//SECTION  Unfavorite an article
 // router.delete(Constants.ArticleRoutes.Favorite, helper.required, function(req, res, next) {
 //   var articleId = req.article._id;
+/**REVIEW  Steps
+ * Get comment 
+ * Get user 
+ * update upvotes
+ */
 
 //   User.findById().threq.payload.iden(function (user){
 //     if (!user) { return res.sendStatus(401); }
