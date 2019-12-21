@@ -95,6 +95,7 @@ router.get(Constants.ArticleRoutes.default, helper.optional, function(req, res, 
   }).catch(next);
 });
 
+//SECTION FEED
 router.get(Constants.ArticleRoutes.feed, helper.required, function(req, res, next) {
   var limit = 20;
   var offset = 0;
@@ -133,7 +134,7 @@ router.get(Constants.ArticleRoutes.feed, helper.required, function(req, res, nex
   });
 });
 
-//NOTE Add Article
+// SECTION Add Article
 router.post(Constants.ArticleRoutes.default, helper.required, function(req, res, next) {
   User.findById(req.payload.id).then(function(user){
     if (!user) { return res.sendStatus(401); }
@@ -149,7 +150,7 @@ router.post(Constants.ArticleRoutes.default, helper.required, function(req, res,
   }).catch(next);
 });
 
-// NOTE Search for a article
+// SECTION  Search for a article
 router.get(Constants.ArticleRoutes.article, helper.optional, function(req, res, next) {
   Promise.all([
     req.payload ? User.findById(req.payload.id) : null,
@@ -160,7 +161,7 @@ router.get(Constants.ArticleRoutes.article, helper.optional, function(req, res, 
   }).catch(next);
 });
 
-// NOTE update article
+// SECTION  update article
 router.put(Constants.ArticleRoutes.article,helper.required,function(req,res,next) 
 {
   User.findById(req.payload.id).then(function(user)
@@ -191,7 +192,7 @@ router.put(Constants.ArticleRoutes.article,helper.required,function(req,res,next
   });
 });
 
-//NOTE delete article
+// SECTION delete article
 router.delete( Constants.ArticleRoutes.article , helper.required, function(req, res, next) {
   User.findById(req.payload.id).then(function(user){
     if (!user) { return res.sendStatus(401); }
@@ -206,7 +207,7 @@ router.delete( Constants.ArticleRoutes.article , helper.required, function(req, 
   }).catch(next);
 });
 
-// NOTE Favorite an article
+// SECTION Favorite an article
 router.post(Constants.ArticleRoutes.Favorite, helper.required, function(req, res, next) {
   var articleId = req.article._id;
 
@@ -221,7 +222,7 @@ router.post(Constants.ArticleRoutes.Favorite, helper.required, function(req, res
   }).catch(next);
 });
 
-//NOTE Unfavorite an article
+// SECTION Unfavorite an article
 router.delete(Constants.ArticleRoutes.Favorite, helper.required, function(req, res, next) {
   var articleId = req.article._id;
 
@@ -236,7 +237,7 @@ router.delete(Constants.ArticleRoutes.Favorite, helper.required, function(req, r
   }).catch(next);
 });
 
-// NOTE return an article's comments
+// SECTION return an article's comments
 router.get(Constants.ArticleRoutes.Comments, helper.optional, function(req, res, next){
   Promise.resolve(req.payload ? User.findById(req.payload.id) : null).then(function(user){
     return req.article.populate({
@@ -257,7 +258,7 @@ router.get(Constants.ArticleRoutes.Comments, helper.optional, function(req, res,
   }).catch(next);
 });
 
-// create a new comment
+// SECTION create a new comment
 router.post(Constants.ArticleRoutes.Comments, helper.required, function(req, res, next) {
   /**Query structure 
    * UserId = req.payload.id
