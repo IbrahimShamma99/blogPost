@@ -4,63 +4,58 @@ const request = require("supertest");
 const { Constants } = require("../constants/constants");
 var session = require('supertest-session');
 const TestAccount = Constants.TestAccount;
+const UnAuthTestAccount = Constants.UnAuthorizedAccountTest;
 var testSession = null;
-
 beforeEach(function () {
     testSession = session(app);
   });
 var auth = {};
-loginUser(auth, TestAccount);//NOTE Add article using an authorized User
-//SECTION Add article 
+prepareUser(TestAccount);//NOTE Add article using an authorized User
+//SECTION Add article While being Authorized
 test('TEST article', function () {
     
-    testSession
+    request(app)
         .post(Constants.Routes.addArticle)
         .send(Constants.TestArticle)
         .set('Authorization', 'bearer ' + auth.token)
         .expect(200)
         .end(function (err, res) {
-            if (err) {setTimeout(2000,()=> console.log(err))
-            
-            
+            if (err) {setTimeout(200,()=> console.log(err))
             };
         }).expect(201);
 });
-
-
-const UnAuthTestAccount = Constants.UnAuthorizedAccountTest;
-auth = {};
-loginUser(auth, UnAuthTestAccount);//NOTE Add article using an unauthorized User
-
-//SECTION TEST article with no Authentication
-test('TEST article with no Authentication', function () {
-        testSession
-        .post(Constants.Routes.addArticle)
-        .send(Constants.UnAuthTestAccount)
-        .set('Authorization', 'bearer ' + auth.token)
-        .end(function (err, res) {
-            if (err) {setTimeout(2000,()=> console.log(err))};
-        })
-        .expect(422);
-});
-
-var auth = {};
-loginUser(auth, TestAccount);//NOTE Add article using an authorized User
-
-//SECTION Add Comment 
-test('Add Comment', function () {
-    testSession
+//SECTION Add Comment autorized
+test('Add Comment with authentication', function () {
+    request(app)
         .post(Constants.ArticleRoutes.Comments)
         .send(Constants.TestComment)
         .set('Authorization', 'bearer ' + auth.token)
         .expect(200)
         .end(function (err, res) {
-            if (err) {setTimeout(2000,()=> console.log(err))
+            if (err) {setTimeout(200,()=> console.log(err))
             };
         }).expect(201);
 });
-
-
+//NOTE Add article using an unauthorized User
+prepareUser(UnAuthTestAccount);
+//SECTION TEST article with no Authentication
+test('TEST article with no Authentication', function () {
+        request(app)
+        .post(Constants.Routes.addArticle)
+        .send(Constants.TestArticle)
+        .set('Authorization', 'bearer ' + auth.token)
+        .end(function (err, res) {
+            if (err) {setTimeout(200,()=> console.log(err))};
+        }).expect(422);
+});
+//SECTION Add Comment autorized
+test('Add Comment without authentication', function () {
+    request(app)
+        .post(Constants.ArticleRoutes.Comments)
+        .send(Constants.TestComment)
+        .set('Authorization', 'bearer ' + auth.token)
+        .expect(422);
+});
 //TODO Fix this crap !
 function loginUser(auth, Account) {
     return function (done) {
@@ -75,3 +70,7 @@ function loginUser(auth, Account) {
         }
     };
 }
+function prepareUser (Account) {
+    auth = {};
+    loginUser(auth, Account);
+};

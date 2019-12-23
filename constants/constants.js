@@ -13,7 +13,7 @@ const TestNames = {
 };
 
 const ArticleRoutes = {
-    Comment:'/:article/comments/:comment',
+    Comment:'api/:article/comments/:comment',
     Comments:'/:article/comments',
     Favorite:'/:article/favorite',
     article:'/:article',
