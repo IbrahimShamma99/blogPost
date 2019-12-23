@@ -45,6 +45,13 @@ const TestAccount = {
         "password": "heisaverybadman"
     }
 };
+const UnAuthorizedAccountTest = {
+    "user":
+    {
+        "username": "helloWorld@gmail.com",
+        "password": "heisaverybadman"
+    }
+}
 const TestArticle = {
     "article":{
         "title":"HELLO",
@@ -61,7 +68,8 @@ const Constants = {
     ProfileRoutes,
     TagsRoutes,
     TestAccount,
-    TestArticle
+    TestArticle,
+    UnAuthorizedAccountTest
 };
 
 module.exports = {
