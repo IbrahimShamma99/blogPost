@@ -1,12 +1,15 @@
-const TestRoutes = {
+const Routes = {
     signup:'api/users',
-    login:'api/users/login'
+    login:'api/users/login',
+    addArticle:'api/'
 };
 
 const TestNames = {
     loginTest:"Login Same user we assigned",
     uncorrectassigneduserTest:"uncorrect assigned user",
-    newuser:"assign new user"
+    newuserTest:"assign new user",
+    loginWithMistakenEmailTest:"login With Mistaken Email",
+    addArticleTest:"Add Article"
 };
 
 const ArticleRoutes = {
@@ -35,13 +38,30 @@ const TagsRoutes = {
     base:'/tags',
     default:'/'
 };
+const TestAccount = {
+    "user":
+    {
+        "username": "hello@gmail.com",
+        "password": "heisaverybadman"
+    }
+};
+const TestArticle = {
+    "article":{
+        "title":"HELLO",
+        "body":"HELLO it is Ibrahim!"
+    }
+};
+
+
 const Constants = {
-    TestRoutes,
+    Routes,
     TestNames,
     ArticleRoutes,
     UserRoutes,
     ProfileRoutes,
-    TagsRoutes
+    TagsRoutes,
+    TestAccount,
+    TestArticle
 };
 
 module.exports = {

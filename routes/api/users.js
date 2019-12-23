@@ -5,7 +5,8 @@ var User = mongoose.model('User');
 var helper = require('../../middlewares/Helper');
 var {Constants} = require("../../constants/constants");
 // var {routes} = require("");
-//NOTE Search for a user 
+
+//SECTION Search for a user 
 router.get( Constants.UserRoutes.user , helper.required , function(req, res, next){
   User.findById(req.payload.id).then(
     function(user){
@@ -15,7 +16,7 @@ router.get( Constants.UserRoutes.user , helper.required , function(req, res, nex
   }).catch(next);
 });
 
-//NOTE Updates User
+//SECTION Updates User
 router.put(Constants.UserRoutes.user , helper.required, function(req, res, next){
   User.findById(req.payload.id).then(function(user){
     
@@ -43,7 +44,7 @@ router.put(Constants.UserRoutes.user , helper.required, function(req, res, next)
     });
   }).catch(next);
 });
-//NOTE Login
+// SECTION Login
 router.post(Constants.UserRoutes.login, function(req, res, next){
   if(!req.body.user.email){
     return res.status(422).json({errors: {email: "can't be blank"}});
@@ -58,17 +59,19 @@ router.post(Constants.UserRoutes.login, function(req, res, next){
 
     if(user){
       user.token = user.generateJWT();
-      user = user.toAuthJSON()
+      user = user.toAuthJSON();
       return res.json({
         username:user.username ,
-        email:user.email  });
+        email:user.email ,
+        token:user.token
+      });
     } else {
       return res.status(422).json(info);
     }
   })(req, res, next);
 });
 
-// NOTE Signup
+// SECTION Signup
 router.post(Constants.UserRoutes.users, function(req, res, next){
   var user = new User();
   try {

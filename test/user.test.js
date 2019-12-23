@@ -5,12 +5,13 @@ const {
 const {
     Constants
 } = require("../constants/constants");
-
+var superagent = require('superagent');
+var agent = superagent.agent();
 const randomizer = Math.random();
 
-//Uncorrect name or password
+//SECTION Uncorrect name or password
 test(Constants.TestNames.uncorrectassigneduserTest,function () {
-    request(app).post(Constants.TestRoutes.signup).send({
+    request(app).post(Constants.Routes.signup).send({
         
             user:{
                 email:"hi@gmail.com",
@@ -19,10 +20,10 @@ test(Constants.TestNames.uncorrectassigneduserTest,function () {
         
     }).expect(422);
 });
-//NOTE Register new user
-test(Constants.TestNames.newuser, function () {
+//SECTION Register new user
+test(Constants.TestNames.newuserTest, function () {
 
-    request(app).post(Constants.TestRoutes.signup).send({
+    request(app).post(Constants.Routes.signup).send({
         user: {
             username: "Ibrahismjaws",
             email: "ininseeainin1" + randomizer.toString() + "@gmail.com",
@@ -31,13 +32,25 @@ test(Constants.TestNames.newuser, function () {
     }).expect(201);
 });
 
-//NOTE login 
+//SECTION login
 test(Constants.TestNames.loginTest, function () {
 
-    request(app).post(Constants.TestRoutes.login).send({
+    request(app).post(Constants.Routes.login).send({
         user: {
             email: "ininseeainin1" + randomizer.toString() + "@gmail.com",
             password: "macgeetheking"
         }
     }).expect(201);
 });
+
+//SECTION login with mistaken password or 
+test(Constants.TestNames.loginWithMistakenEmailTest, function () {
+
+    request(app).post(Constants.Routes.login).send({
+        user: {
+            email: "ininseeainin2" + randomizer.toString() + "@gmail.com",
+            password: "macgeetheking"
+        }
+    }).expect(422);
+});
+

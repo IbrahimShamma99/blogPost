@@ -4,17 +4,17 @@
   "description": "conduit on node",
   "main": "app.js",
   "scripts": {
-    "mongo:start": "docker run --name realworld-mongo -p 27017:27017 mongo & sleep 5",
+    "mongo:start": "docker run --name Restfull-mongo -p 27017:27017 mongo & sleep 5",
     "start": "node ./app.js",
     "dev": "nodemon ./app.js ",
     "test-postman": "newman run ./tests-api/api-tests.postman.json -e ./tests-api/env-api-tests.postman.json",
     "test": "jest --watch",
     "stop": "lsof -ti :3000 | xargs kill",
-    "mongo:stop": "docker stop realworld-mongo && docker rm realworld-mongo"
+    "mongo:stop": "docker stop Restfull-mongo && docker rm Restfull-mongo"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gothinkster/productionready-node-api.git"
+    "url": "git+https://github.com/IbrahimShamma99/blogPost.git"
   },
   "license": "ISC",
   "dependencies": {
