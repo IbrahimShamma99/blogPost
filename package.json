@@ -37,11 +37,12 @@
     "passport-local": "1.0.0",
     "request": "^2.88.0",
     "slug": "0.9.1",
-    "supertest": "^4.0.2",
     "underscore": "1.8.3"
   },
   "devDependencies": {
     "newman": "^3.8.2",
-    "nodemon": "^1.11.0"
+    "nodemon": "^1.11.0",
+    "supertest": "^4.0.2",
+    "supertest-session": "^4.0.0"
   }
 }

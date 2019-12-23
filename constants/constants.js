@@ -58,6 +58,11 @@ const TestArticle = {
         "body":"HELLO it is Ibrahim!"
     }
 };
+const TestComment = {
+    "comment":{
+        "body":"The greatest comment of all time"
+    }
+};
 
 
 const Constants = {
@@ -69,7 +74,8 @@ const Constants = {
     TagsRoutes,
     TestAccount,
     TestArticle,
-    UnAuthorizedAccountTest
+    UnAuthorizedAccountTest,
+    TestComment
 };
 
 module.exports = {
