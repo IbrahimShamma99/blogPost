@@ -7,31 +7,31 @@ var mongoose = require('mongoose');
  * @timestamps => to save the datetime of the operation 
  */
 var CommentSchema = new mongoose.Schema({
-  body: {type:String , required:true} ,
-  author: { type: mongoose.Schema.Types.ObjectId, ref:'User'},
-  article: { type: mongoose.Schema.Types.ObjectId, ref:'Article'},
-  UpvotesCount:{type:Number,default:0}
-},{
-  timestamps: true
+    body: { type: String, required: true },
+    author: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    article: { type: mongoose.Schema.Types.ObjectId, ref: 'Article' },
+    UpvotesCount: { type: Number, default: 0 }
+}, {
+    timestamps: true
 });
 
 // Requires population of author
-CommentSchema.methods.toJSONFor = function(user){
-  return {
-    id: this._id,
-    body: this.body,
-    createdAt: this.createdAt,
-    author: this.author.toProfileJSONFor(user)
-  };
+CommentSchema.methods.toJSONFor = function(user) {
+    return {
+        id: this._id,
+        body: this.body,
+        createdAt: this.createdAt,
+        author: this.author.toProfileJSONFor(user)
+    };
 };
 CommentSchema.methods.updateUpvotesCount = function() {
-  var comment = this;
+    var comment = this;
 
-  return User.count({Upvotes: {$in: [comment._id]}}).then(function(count){
-    comment.updateUpvotesCount = count;
+    return User.count({ Upvotes: { $in: [comment._id] } }).then(function(count) {
+        comment.updateUpvotesCount = count;
 
-    return comment.save();
-  });
+        return comment.save();
+    });
 };
 
 mongoose.model('Comment', CommentSchema);

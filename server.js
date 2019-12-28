@@ -1,7 +1,4 @@
-var http = require('http'),
-    path = require('path'),
-    methods = require('methods'),
-    express = require('express'),
+var express = require('express'),
     bodyParser = require('body-parser'),
     session = require('express-session'),
     cors = require('cors'),
@@ -24,17 +21,22 @@ app.use(bodyParser.json());
 app.use(require('method-override')());
 app.use(express.static(__dirname + '/public'));
 
-app.use(session({ secret: 'conduit', cookie: { maxAge: 60000 }, resave: false, saveUninitialized: false  }));
+app.use(session({
+    secret: 'IbrahimBlog',
+    cookie: { maxAge: 60000 },
+    resave: false,
+    saveUninitialized: false
+}));
 
 if (!isProduction) {
-  app.use(errorhandler());
+    app.use(errorhandler());
 }
 
-if(isProduction){
-  mongoose.connect(process.env.MONGODB_URI);
+if (isProduction) {
+    mongoose.connect(process.env.MONGODB_URI);
 } else {
-  mongoose.connect('mongodb://localhost/conduit');
-  mongoose.set('debug', true);
+    mongoose.connect('mongodb://localhost/IbrahimBlog');
+    mongoose.set('debug', true);
 }
 //NOTE Import Database
 require('./models/User');
@@ -46,9 +48,9 @@ app.use(require('./routes'));
 
 /// catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
 });
 
 /// error handlers
@@ -56,26 +58,30 @@ app.use(function(req, res, next) {
 // development error handler
 // will print stacktrace
 if (!isProduction) {
-  app.use(function(err, req, res, next) {
-    console.log(err.stack);
+    app.use(function(err, req, res, next) {
+        console.log(err.stack);
 
-    res.status(err.status || 500);
+        res.status(err.status || 500);
 
-    res.json({'errors': {
-      message: err.message,
-      error: err
-    }});
-  });
+        res.json({
+            'errors': {
+                message: err.message,
+                error: err
+            }
+        });
+    });
 }
 
 // production error handler
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
-  res.status(err.status || 500);
-  res.json({'errors': {
-    message: err.message,
-    error: {}
-  }});
+    res.status(err.status || 500);
+    res.json({
+        'errors': {
+            message: err.message,
+            error: {}
+        }
+    });
 });
 
-module.exports = {app}
+module.exports = { app }
