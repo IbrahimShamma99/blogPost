@@ -11,7 +11,7 @@ const UserSearch = (req, res, next) => {
         }).catch(next);
 };
 
-const UpdateUser = function(req, res, next) {
+const UserUpdate = function(req, res, next) {
     User.findById(req.payload.id).then(function(user) {
 
         if (!user) { return res.sendStatus(401); }
@@ -37,8 +37,51 @@ const UpdateUser = function(req, res, next) {
             return res.json({ user: user.toAuthJSON() });
         });
     }).catch(next);
-}
+};
 
 
+const UserLogin = function(req, res, next) {
+    if (!req.body.user.email) {
+        return res.status(422).json({ errors: { email: "can't be blank" } });
+    }
 
-module.exports = { UserSearch, UpdateUser };
+    if (!req.body.user.password) {
+        return res.status(422).json({ errors: { password: "can't be blank" } });
+    }
+
+    passport.authenticate('local', { session: false }, function(err, user, info) {
+        if (err) { return next(err); }
+
+        if (user) {
+            user.token = user.generateJWT();
+            user = user.toAuthJSON();
+            return res.json({
+                username: user.username,
+                email: user.email,
+                token: user.token
+            });
+        } else {
+            return res.status(422).json(info);
+        }
+    })(req, res, next);
+};
+
+const UserSignup = function(req, res, next) {
+    var user = new User();
+    try {
+        user.username = req.body.user.username;
+        user.email = req.body.user.email;
+        user.setPassword(req.body.user.password);
+    } catch (e) {
+        console.log(e);
+    }
+
+    user.save().then(function() {
+        user = user.toAuthJSON();
+        return res.json({
+            email: user.email,
+            username: user.username
+        });
+    }).catch(next);
+};
+module.exports = { UserSearch, UserUpdate, UserLogin, UserSignup };
