@@ -100,6 +100,23 @@ const NewsFeed = (req, res, next) => {
     });
 };
 
+const AddArticle = (req, res, next) => {
+    User.findById(req.payload.id).then(function(user) {
+        if (!user) { return res.sendStatus(401); }
+
+        var article = new Article(req.body.article);
+
+        article.author = user;
+
+        return article.save().then(function() {
+            console.log(article.author);
+            return res.json({ article: article.toJSONFor(user) });
+        });
+    }).catch(next);
+};
+
+
+
 const DelteUpvote = (req, res, next) => {
     var commentid = req.comment._id;
     /**REVIEW  Steps
@@ -119,5 +136,42 @@ const DelteUpvote = (req, res, next) => {
     }).catch(next);
 };
 
+const UpvoteComment = (req, res, next) => {
+    /**REVIEW Steps
+     * Get comment 
+     * Get user 
+     * update upvotes
+     */
+    var commentId = req.comment._id;
+    User.findById(req.payload.id).then(function(user) {
+        if (!user) {
+            return res.sendStatus(401);
+        }
+        return user.upvote(commentId).then(function() {
+            return req.comment.updateUpvotesCount().then(function(comment) {
+                return res.json({ comment: comment.toJSONFor(user) });
+            });
+        });
+    }).catch(next);
+};
 
-module.exports = { Feed, NewsFeed, DelteUpvote };
+const ArticleSearch = (req, res, next) => {
+    Promise.all([
+        req.payload ? User.findById(req.payload.id) : null,
+        req.article.populate('author').execPopulate()
+    ]).then(function(results) {
+        var user = results[0];
+        return res.json({ article: req.article.toJSONFor(user) });
+    }).catch(next);
+};
+
+
+module.exports = {
+    Feed,
+    NewsFeed,
+    DelteUpvote,
+    AddArticle,
+    UpvoteComment,
+    ArticleSearch
+
+};

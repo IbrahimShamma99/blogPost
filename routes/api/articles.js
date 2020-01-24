@@ -5,7 +5,7 @@ var Comment = mongoose.model('Comment');
 var User = mongoose.model('User');
 var helper = require('../../middlewares/Helper');
 const { Constants } = require("../../constants/constants");
-const { Feed, NewsFeed, DelteUpvote } = require("../methods/articles");
+const { Feed, NewsFeed, DelteUpvote, ArticleSearch, UpvoteComment, AddArticle } = require("../methods/articles");
 const { article, comment } = require("../population/population");
 /* ANCHOR IMPORTANT 
 populate is the process of 
@@ -21,31 +21,10 @@ router.get(Constants.ArticleRoutes.default, helper.optional, Feed);
 router.get(Constants.ArticleRoutes.feed, helper.required, NewsFeed);
 
 // SECTION Add Article
-router.post(Constants.ArticleRoutes.default, helper.required, function(req, res, next) {
-    User.findById(req.payload.id).then(function(user) {
-        if (!user) { return res.sendStatus(401); }
-
-        var article = new Article(req.body.article);
-
-        article.author = user;
-
-        return article.save().then(function() {
-            console.log(article.author);
-            return res.json({ article: article.toJSONFor(user) });
-        });
-    }).catch(next);
-});
+router.post(Constants.ArticleRoutes.default, helper.required, AddArticle);
 
 // SECTION  Search for a article
-router.get(Constants.ArticleRoutes.article, helper.optional, function(req, res, next) {
-    Promise.all([
-        req.payload ? User.findById(req.payload.id) : null,
-        req.article.populate('author').execPopulate()
-    ]).then(function(results) {
-        var user = results[0];
-        return res.json({ article: req.article.toJSONFor(user) });
-    }).catch(next);
-});
+router.get(Constants.ArticleRoutes.article, helper.optional, ArticleSearch);
 
 // SECTION  update article
 router.put(Constants.ArticleRoutes.article, helper.required, function(req, res, next) {
@@ -192,25 +171,8 @@ router.delete(Constants.ArticleRoutes.Comment, helper.required, function(req, re
 
 //SECTION Upvote a comment
 router.post(Constants.ArticleRoutes.Comment,
-    helper.required,
-    (req, res, next) => {
-        /**REVIEW Steps
-         * Get comment 
-         * Get user 
-         * update upvotes
-         */
-        var commentId = req.comment._id;
-        User.findById(req.payload.id).then(function(user) {
-            if (!user) {
-                return res.sendStatus(401);
-            }
-            return user.upvote(commentId).then(function() {
-                return req.comment.updateUpvotesCount().then(function(comment) {
-                    return res.json({ comment: comment.toJSONFor(user) });
-                });
-            });
-        }).catch(next);
-    });
+    helper.required, UpvoteComment
+);
 
 //SECTION  cancel upvoting a comment
 router.delete(Constants.ArticleRoutes.Favorite,
