@@ -100,5 +100,24 @@ const NewsFeed = (req, res, next) => {
     });
 };
 
+const DelteUpvote = (req, res, next) => {
+    var commentid = req.comment._id;
+    /**REVIEW  Steps
+     * Get comment 
+     * Get user 
+     * update upvotes
+     */
+    User.findById(req.payload.id).threq.payload.iden(function(user) {
+        if (!user) {
+            return res.sendStatus(401);
+        }
+        return user.Cancelupvote(commentid).then(function() {
+            return req.commentid.updateUpvotesCount().then(function(comment) {
+                return res.json({ comment: comment.toJSONFor(user) });
+            });
+        });
+    }).catch(next);
+};
 
-module.exports = { Feed, NewsFeed };
+
+module.exports = { Feed, NewsFeed, DelteUpvote };

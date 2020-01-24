@@ -5,7 +5,7 @@ var Comment = mongoose.model('Comment');
 var User = mongoose.model('User');
 var helper = require('../../middlewares/Helper');
 const { Constants } = require("../../constants/constants");
-const { Feed, NewsFeed } = require("../methods/articles");
+const { Feed, NewsFeed, DelteUpvote } = require("../methods/articles");
 const { article, comment } = require("../population/population");
 /* ANCHOR IMPORTANT 
 populate is the process of 
@@ -215,23 +215,6 @@ router.post(Constants.ArticleRoutes.Comment,
 //SECTION  cancel upvoting a comment
 router.delete(Constants.ArticleRoutes.Favorite,
     helper.required,
-    function(req, res, next) {
-        var commentid = req.comment._id;
-        /**REVIEW  Steps
-         * Get comment 
-         * Get user 
-         * update upvotes
-         */
-        User.findById(req.payload.id).threq.payload.iden(function(user) {
-            if (!user) {
-                return res.sendStatus(401);
-            }
-            return user.Cancelupvote(commentid).then(function() {
-                return req.commentid.updateUpvotesCount().then(function(comment) {
-                    return res.json({ comment: comment.toJSONFor(user) });
-                });
-            });
-        }).catch(next);
-    });
+    DelteUpvote);
 
 module.exports = router;
