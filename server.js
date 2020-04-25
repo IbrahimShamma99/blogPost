@@ -35,7 +35,11 @@ if (!isProduction) {
 if (isProduction) {
     mongoose.connect(process.env.MONGODB_URI);
 } else {
-    mongoose.connect('mongodb://localhost/IbrahimBlog');
+    mongoose.connect('mongodb://localhost/IbrahimBlog',{
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useCreateIndex:true
+    });
     mongoose.set('debug', true);
 }
 //NOTE Import Database
