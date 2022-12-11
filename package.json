@@ -23,7 +23,7 @@
         "documentation": "^12.1.4",
         "ejs": "2.5.5",
         "errorhandler": "1.4.3",
-        "express": "^4.17.1",
+        "express": "^4.17.3",
         "express-jwt": "6.0.0",
         "express-session": "^1.17.0",
         "jest": "^24.9.0",
