@@ -27,7 +27,7 @@
         "express-jwt": "6.0.0",
         "express-session": "^1.17.0",
         "jest": "^24.9.0",
-        "jsonwebtoken": "7.1.9",
+        "jsonwebtoken": "9.0.0",
         "method-override": "2.3.10",
         "methods": "1.1.2",
         "mongoose": "5.7.5",
